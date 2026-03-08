@@ -1,19 +1,23 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M9.06145 23.1079C5.26816 22.3769 -3.39077 20.6274 1.4173 5.06384C9.6344 6.09939 16.9728 14.0644 9.06145 23.1079Z" fill="url(#paint0_linear_17557_2021)"/>
-<path d="M8.91928 23.0939C5.27642 21.2223 0.78371 4.20891 17.0071 0C20.7569 7.19341 19.6212 16.5452 8.91928 23.0939Z" fill="url(#paint1_linear_17557_2021)"/>
-<path d="M8.91388 23.0788C8.73534 19.8817 10.1585 9.08525 23.5699 13.1107C23.1812 20.1229 18.984 26.4182 8.91388 23.0788Z" fill="url(#paint2_linear_17557_2021)"/>
-<defs>
-<linearGradient id="paint0_linear_17557_2021" x1="3.77557" y1="5.91571" x2="5.23185" y2="21.5589" gradientUnits="userSpaceOnUse">
-<stop stop-color="#18E299"/>
-<stop offset="1" stop-color="#15803D"/>
-</linearGradient>
-<linearGradient id="paint1_linear_17557_2021" x1="12.1711" y1="-0.718425" x2="10.1897" y2="22.9832" gradientUnits="userSpaceOnUse">
-<stop stop-color="#16A34A"/>
-<stop offset="1" stop-color="#4ADE80"/>
-</linearGradient>
-<linearGradient id="paint2_linear_17557_2021" x1="23.1327" y1="15.353" x2="9.33841" y2="18.5196" gradientUnits="userSpaceOnUse">
-<stop stop-color="#4ADE80"/>
-<stop offset="1" stop-color="#0D9373"/>
-</linearGradient>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><style>
+    #light-icon {
+      display: inline;
+    }
+    #dark-icon {
+      display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #light-icon {
+        display: none;
+      }
+      #dark-icon {
+        display: inline;
+      }
+    }
+  </style><g id="light-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g clip-path="url(#SvgjsClipPath1126)"><rect width="1000" height="1000" fill="#000000"></rect><g transform="matrix(4.166666666666667,0,0,4.166666666666667,100,100)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="192" height="192"><svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="94.4167" cy="96.028" r="85.9167" stroke="#D9D9D9" stroke-width="9.5"></circle>
+<path d="M30.002 100.079C32.0718 132.994 59.0137 159.161 92.248 160H30.002V100.079ZM158.001 160H95.4824C129.831 159.164 157.473 131.274 157.91 96.8281L157.915 96C157.915 61.1782 130.112 32.8497 95.4951 32H158.001V160ZM93.8945 40.9805C124.281 40.9807 148.915 65.6137 148.915 96C148.915 126.386 124.281 151.02 93.8945 151.021C63.5082 151.02 38.8753 126.386 38.875 96C38.8753 65.6137 63.5082 40.9807 93.8945 40.9805ZM71.9951 74.8184L62.9336 95.7451L71.9951 116.672L93.873 125.34L115.751 116.672L124.813 95.7451L115.751 74.8184L93.873 66.1504L71.9951 74.8184ZM92.293 32C59.032 32.8167 32.064 59.0007 30.002 91.9385V32H92.293Z" fill="#D9D9D9"></path>
+</svg></svg></g></g><defs><clipPath id="SvgjsClipPath1126"><rect width="1000" height="1000" x="0" y="0" rx="500" ry="500"></rect></clipPath></defs></svg></g><g id="dark-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g><g transform="matrix(5.208333333333333,0,0,5.208333333333333,0,0)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="192" height="192"><svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="94.4167" cy="96.028" r="85.9167" stroke="#D9D9D9" stroke-width="9.5"></circle>
+<path d="M30.002 100.079C32.0718 132.994 59.0137 159.161 92.248 160H30.002V100.079ZM158.001 160H95.4824C129.831 159.164 157.473 131.274 157.91 96.8281L157.915 96C157.915 61.1782 130.112 32.8497 95.4951 32H158.001V160ZM93.8945 40.9805C124.281 40.9807 148.915 65.6137 148.915 96C148.915 126.386 124.281 151.02 93.8945 151.021C63.5082 151.02 38.8753 126.386 38.875 96C38.8753 65.6137 63.5082 40.9807 93.8945 40.9805ZM71.9951 74.8184L62.9336 95.7451L71.9951 116.672L93.873 125.34L115.751 116.672L124.813 95.7451L115.751 74.8184L93.873 66.1504L71.9951 74.8184ZM92.293 32C59.032 32.8167 32.064 59.0007 30.002 91.9385V32H92.293Z" fill="#D9D9D9"></path>
+</svg></svg></g></g></svg></g></svg>

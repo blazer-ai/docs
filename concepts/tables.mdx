@@ -1,0 +1,61 @@
+---
+title: "Tables"
+description: "How Blazar organizes your research into structured, manageable tables."
+---
+
+## What is a Blazar table?
+
+A table is the core unit of research in Blazar. Each table represents a single research question and contains the structured data that Blazar's AI agents find on the web.
+
+A table consists of:
+
+- **A name** — a descriptive title you give to your research (e.g., "AI SaaS Companies in Europe")
+- **Rows** — one for each entity that matches your query (e.g., individual companies)
+- **Columns** — one for each data point you asked for (e.g., website, headquarters, employee count)
+- **Cells** — each cell contains a researched value with one or more [citations](/concepts/citations)
+
+<Frame caption="A Blazar table with rows for entities and columns for data points.">
+  <img src="/images/placeholder-table-structure.png" alt="Blazar table structure showing rows, columns, and cited cells" />
+</Frame>
+
+## Creating a table
+
+You can create a new table in two ways:
+
+1. **Click "Create new table"** in the empty workspace
+2. **Use the keyboard shortcut:** `Cmd` + `;` (Mac) or `Ctrl` + `;` (Windows/Linux)
+
+You can also create additional tables from the [sidebar](/features/sidebar) using the add button.
+
+## Naming your table
+
+When you create a table, a title field appears at the top of the workspace. Click it to type your table name. A good table name describes the research question — it helps you identify the table later when you have multiple tables.
+
+**Examples of good table names:**
+
+- "European AI startups founded in 2025"
+- "Best laptop models under $1000"
+
+Press **Enter** after naming your table to move to the query input field.
+
+## Table structure
+
+Blazar automatically determines the table structure based on your query:
+
+| Component | What it represents | Example |
+| --------- | ------------------ | ------- |
+| Rows | Entities that match your query | Notion, Figma, Datadog |
+| Columns | Data points you asked for | Website, headquarters, employee count |
+| Cells | Researched values with sources | "San Francisco, CA" with citation |
+
+Each cell is not just a value — it includes the source URL and the exact text passage that supports the data. You can inspect any cell's citations by clicking on it or pressing `Cmd` + `0`. See [Citations](/concepts/citations) for more details.
+
+You can also add rows (`Cmd` + `[`) and columns (`Cmd` + `]`) to an existing table using keyboard shortcuts.
+
+## Managing multiple tables
+
+You can create multiple tables and switch between them using the [sidebar](/features/sidebar). Each table retains its data independently.
+
+<Warning>
+  Blazar runs one research at a time. While a research is in progress, you cannot switch to another table. Wait for the current research to complete before navigating away.
+</Warning>

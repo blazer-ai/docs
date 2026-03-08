@@ -1,0 +1,223 @@
+---
+title: "Queries"
+description: "How to write effective natural language queries to get the best research results from Blazar."
+---
+
+## How queries work
+
+You tell Blazar what to research using plain language. Describe the entities you want, any filters or constraints, and the specific data points you need extracted. Blazar's AI agents interpret your query, search the web, and return a structured table of results.
+
+## Query structure
+
+A well-structured query has three parts:
+
+1. **What to find** — the number and type of entities (e.g., "Find 10 AI SaaS companies")
+2. **Constraints** — filters like region, industry, time period, or size (e.g., "based in Europe")
+3. **Fields to extract** — the specific data points you want as columns (e.g., "Website, headquarters, employee count")
+
+Here's the general pattern:
+
+```text
+Find {number} {entity type} that {criteria}.
+
+For each, extract:
+- {field 1}
+- {field 2}
+- {field 3}
+```
+
+## Writing effective queries
+
+### Be specific about entities
+
+Tell Blazar exactly what kind of entities you're looking for and how many.
+
+<Columns cols={2}>
+  <Card title="Good" icon="check">
+    "Find 10 companies in AI SaaS based in Europe"
+  </Card>
+  <Card title="Too vague" icon="xmark">
+    "AI companies"
+  </Card>
+</Columns>
+
+### List the fields you want extracted
+
+The columns in your result table come directly from the fields you list. Be explicit about what data points you need — this gives you full control over the table structure.
+
+<Columns cols={2}>
+  <Card title="Good" icon="check">
+    "For each company, extract: Website, headquarters location, key products, founded year, employee count, contact email"
+  </Card>
+  <Card title="Too vague" icon="xmark">
+    "Get me info about each company"
+  </Card>
+</Columns>
+
+### Add constraints to narrow results
+
+Use filters like geography, time period, company size, funding stage, or industry segment to get more relevant results.
+
+<Columns cols={2}>
+  <Card title="Good" icon="check">
+    "Find 10 Fintech startups that raised Series A funding in 2024"
+  </Card>
+  <Card title="Too broad" icon="xmark">
+    "Fintech startups"
+  </Card>
+</Columns>
+
+## Example queries by category
+
+Blazar works across many use cases. Here are real query templates for each category:
+
+<AccordionGroup>
+  <Accordion title="Business & Market">
+    **Find companies in a specific industry:**
+    ```text
+    Find 10 companies in AI SaaS based in Europe.
+
+    For each company, extract:
+    - Website
+    - Headquarters location
+    - Key products or services
+    - Founded year
+    - Employee count
+    - Contact email
+    - LinkedIn company page
+    ```
+
+    **Find competitors:**
+    ```text
+    Find 10 competitors to Stripe in the payment processing space.
+
+    For each competitor, extract:
+    - Website
+    - Headquarters
+    - Key differentiators
+    - Funding stage
+    - Employee count
+    - LinkedIn company page
+    ```
+
+    **Find investors:**
+    ```text
+    Find 10 venture capital firms that invest in AI and Robotics
+    at Seed to Series A stage.
+
+    For each investor, extract:
+    - Website
+    - Contact email
+    - Preferred industries
+    - Investment stage focus
+    - Recent portfolio companies
+    - Crunchbase profile
+    - LinkedIn company page
+    ```
+  </Accordion>
+
+  <Accordion title="Sales & Lead Generation">
+    **Find potential clients:**
+    ```text
+    Find 20 e-commerce companies with 10-100 employees
+    in United States.
+
+    For each company, extract:
+    - Website
+    - Contact email
+    - Decision-maker LinkedIn profile
+    - Company description
+    - LinkedIn company page
+    ```
+
+    **Find B2B suppliers:**
+    ```text
+    Find 10 B2B suppliers of aluminum parts in China.
+
+    For each supplier, extract:
+    - Website
+    - Contact email
+    - Product categories
+    - Minimum order quantity
+    - Factory certifications
+    ```
+  </Accordion>
+
+  <Accordion title="Research & Data Collection">
+    **Find academic papers:**
+    ```text
+    Find 10 academic papers about Graph Neural Networks
+    published in 2022-2024.
+
+    For each paper, extract:
+    - Paper title
+    - Authors
+    - Publication venue
+    - Publication year
+    - Abstract summary
+    ```
+
+    **Find patents:**
+    ```text
+    Find 10 patents related to quantum encryption.
+
+    For each patent, extract:
+    - Patent title
+    - Patent number
+    - Inventors
+    - Assignee organization
+    - Filing date
+    - Abstract summary
+    ```
+
+    **Find conferences and events:**
+    ```text
+    Find 10 upcoming conferences about biotechnology in 2025.
+
+    For each event, extract:
+    - Date
+    - Location
+    - Website
+    - Key speakers
+    ```
+  </Accordion>
+
+  <Accordion title="Content & Media">
+    **Find influencers:**
+    ```text
+    Find 15 influencers in web development with presence
+    on Twitter/X.
+
+    For each influencer, extract:
+    - Primary niche
+    - Twitter profile
+    - LinkedIn profile
+    - Follower count estimate
+    ```
+
+    **Find news articles:**
+    ```text
+    Find 10 recent news articles about AI policy changes
+    from the past 3 months.
+
+    For each article, extract:
+    - Headline
+    - Publisher
+    - Publication date
+    - Summary
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Tips for better results
+
+<Info>
+  Blazar works best when your query reads like a clear research brief — state what you want, how many, which filters apply, and which fields to extract.
+</Info>
+
+- **Quantify your results** — "Find 10" is better than "find some" or "find a few"
+- **List your fields explicitly** — use "For each, extract:" followed by a bullet list of fields to control exactly which columns appear in your table
+- **Use natural phrasing** — write as if you're briefing a research assistant
+- **Include contact fields when relevant** — fields like contact email, LinkedIn profile, and website are commonly available and useful for outreach
+- **One topic per table** — keep each query focused on a single research question; create separate tables for different topics
+- **Use placeholders for customization** — when adapting templates, replace the placeholder values (e.g., "AI SaaS", "Europe") with your specific criteria
