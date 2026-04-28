@@ -52,8 +52,8 @@
   "navbar": {
     "primary": {
       "type": "button",
-      "label": "Join the Waitlist",
-      "href": "https://waitlist.blazar.it.com"
+      "label": "Get started",
+      "href": "https://tryblazar.com"
     }
   },
   "footer": {
