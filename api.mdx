@@ -1,0 +1,277 @@
+---
+title: "API"
+description: "Use the Blazar product API to create, stream, read, update, and delete research tables and rows with an API key."
+---
+
+## Overview
+
+The Blazar product API lets you work with research tables and rows from server-side tools, scripts, and integrations. Authenticate each request with an API key in the `x-api-key` header.
+
+<Warning>
+  Keep API keys in server-side environments. Do not expose them in browser code, client-side apps, public repositories, or logs.
+</Warning>
+
+## Prerequisites
+
+Before you call the API, you need:
+
+- A Blazar API key for your account
+- The base URL for your Blazar backend
+- Available tokens if you generate tables with AI
+
+Use placeholders in the examples below and replace them with your own values:
+
+```bash
+export BLAZAR_BASE_URL="<BASE_URL>"
+export BLAZAR_API_KEY="<API_KEY>"
+export TABLE_ID="<TABLE_ID>"
+export ROW_ID="<ROW_ID>"
+```
+
+## Authentication
+
+Send your API key with every request:
+
+```bash
+curl "$BLAZAR_BASE_URL/tables" \
+  -H "x-api-key: $BLAZAR_API_KEY"
+```
+
+If the key is missing or invalid, the API returns an unauthorized response.
+
+## Endpoints
+
+| Method | Path | Description |
+| ------ | ---- | ----------- |
+| `POST` | `/tables` | Create a blank table or generate a table from a query |
+| `POST` | `/tables/stream` | Generate a table and receive newline-delimited progress events |
+| `GET` | `/tables` | List tables available to your account |
+| `GET` | `/tables/generation-status` | Check whether your account is currently generating a table |
+| `GET` | `/tables/{tableId}` | Get a table and its rows |
+| `PATCH` | `/tables/{tableId}` | Update table metadata |
+| `DELETE` | `/tables/{tableId}` | Delete a table you own |
+| `GET` | `/tables/{tableId}/prompt` | Get the prompt used to generate a table |
+| `POST` | `/tables/{tableId}/rows` | Add a row |
+| `GET` | `/tables/{tableId}/rows` | List rows |
+| `GET` | `/tables/{tableId}/rows/{rowId}` | Get a row |
+| `PATCH` | `/tables/{tableId}/rows/{rowId}` | Update a row |
+| `DELETE` | `/tables/{tableId}/rows/{rowId}` | Delete a row |
+
+## Tables
+
+### Create a generated table
+
+Use `POST /tables` with a natural language `query` to create a researched table. This endpoint consumes tokens for non-enterprise accounts.
+
+```bash
+curl "$BLAZAR_BASE_URL/tables" \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $BLAZAR_API_KEY" \
+  -d '{
+    "query": "Find AI security companies in Europe. Include website, headquarters, and funding."
+  }'
+```
+
+### Create a blank table
+
+Use `POST /tables` with a `name` when you want to add rows yourself.
+
+```bash
+curl "$BLAZAR_BASE_URL/tables" \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $BLAZAR_API_KEY" \
+  -d '{
+    "name": "AI security companies"
+  }'
+```
+
+### Stream table generation
+
+Use `POST /tables/stream` when you want progress updates while Blazar researches. The response content type is `application/x-ndjson`.
+
+```bash
+curl "$BLAZAR_BASE_URL/tables/stream" \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $BLAZAR_API_KEY" \
+  -d '{
+    "query": "Find AI security companies in Europe. Include website, headquarters, and funding.",
+    "name": "AI security companies"
+  }'
+```
+
+The stream emits one JSON object per line:
+
+```jsonl
+{"type":"progress","stage":"research","message":"Searching for matching entities"}
+{"type":"done","table":{"id":123,"name":"AI security companies","rows":[]}}
+```
+
+If generation fails after the stream starts, the API sends an in-band error event:
+
+```json
+{"type":"error","status":502,"error":"AI service request failed. Please try again."}
+```
+
+### List tables
+
+```bash
+curl "$BLAZAR_BASE_URL/tables" \
+  -H "x-api-key: $BLAZAR_API_KEY"
+```
+
+### Check generation status
+
+Use this endpoint to recover from long-running or interrupted table generation.
+
+```bash
+curl "$BLAZAR_BASE_URL/tables/generation-status" \
+  -H "x-api-key: $BLAZAR_API_KEY"
+```
+
+The response includes whether generation is still running and the newest table ID:
+
+```json
+{
+  "processing": false,
+  "newestTableId": 123,
+  "newestTableCreatedAt": "<ISO_TIMESTAMP>"
+}
+```
+
+### Get a table
+
+```bash
+curl "$BLAZAR_BASE_URL/tables/$TABLE_ID" \
+  -H "x-api-key: $BLAZAR_API_KEY"
+```
+
+A table response includes its metadata, rows, owner summary, and your access level. Row values live inside each row's `data` object.
+
+### Update a table
+
+You can update `name`, `description`, and `settings`.
+
+```bash
+curl "$BLAZAR_BASE_URL/tables/$TABLE_ID" \
+  -X PATCH \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $BLAZAR_API_KEY" \
+  -d '{
+    "name": "European AI security companies",
+    "settings": {
+      "source": "api"
+    }
+  }'
+```
+
+### Delete a table
+
+Only the table owner can delete a table.
+
+```bash
+curl "$BLAZAR_BASE_URL/tables/$TABLE_ID" \
+  -X DELETE \
+  -H "x-api-key: $BLAZAR_API_KEY"
+```
+
+### Get the generation prompt
+
+```bash
+curl "$BLAZAR_BASE_URL/tables/$TABLE_ID/prompt" \
+  -H "x-api-key: $BLAZAR_API_KEY"
+```
+
+## Rows
+
+Rows store flexible JSON in the `data` field. Use keys that match the columns or fields you want in the table.
+
+### Add a row
+
+```bash
+curl "$BLAZAR_BASE_URL/tables/$TABLE_ID/rows" \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $BLAZAR_API_KEY" \
+  -d "{
+    \"tableId\": $TABLE_ID,
+    \"data\": {
+      \"Company\": \"<COMPANY_NAME>\",
+      \"Website\": \"<WEBSITE_URL>\",
+      \"Headquarters\": \"<LOCATION>\"
+    }
+  }"
+```
+
+<Note>
+  Include `tableId` in the request body as well as the URL path. The API uses the path value to choose the table.
+</Note>
+
+### List rows
+
+```bash
+curl "$BLAZAR_BASE_URL/tables/$TABLE_ID/rows" \
+  -H "x-api-key: $BLAZAR_API_KEY"
+```
+
+You can filter by one row data field with an exact match:
+
+```bash
+curl "$BLAZAR_BASE_URL/tables/$TABLE_ID/rows?Headquarters=Berlin%2C%20Germany" \
+  -H "x-api-key: $BLAZAR_API_KEY"
+```
+
+### Get a row
+
+```bash
+curl "$BLAZAR_BASE_URL/tables/$TABLE_ID/rows/$ROW_ID" \
+  -H "x-api-key: $BLAZAR_API_KEY"
+```
+
+### Update a row
+
+`PATCH /tables/{tableId}/rows/{rowId}` merges the provided `data` fields into the existing row.
+
+```bash
+curl "$BLAZAR_BASE_URL/tables/$TABLE_ID/rows/$ROW_ID" \
+  -X PATCH \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $BLAZAR_API_KEY" \
+  -d '{
+    "data": {
+      "Funding": "<FUNDING_AMOUNT>"
+    }
+  }'
+```
+
+### Delete a row
+
+```bash
+curl "$BLAZAR_BASE_URL/tables/$TABLE_ID/rows/$ROW_ID" \
+  -X DELETE \
+  -H "x-api-key: $BLAZAR_API_KEY"
+```
+
+## Access rules
+
+Your API key acts as your account:
+
+- You can read tables you own or tables shared with you.
+- You can update tables and rows when you have edit access.
+- You can delete only tables you own.
+- Generated tables require available tokens unless your account is on an enterprise plan.
+
+## Error handling
+
+Common responses include:
+
+| Status | When it happens |
+| ------ | --------------- |
+| `400` | The request body is missing required fields or has invalid JSON |
+| `401` | The `x-api-key` header is missing or invalid |
+| `403` | Your account does not have the required access |
+| `404` | The table or row is not available to your account |
+| `409` | A table is already being generated for your account |
+| `502` | The upstream AI service failed |

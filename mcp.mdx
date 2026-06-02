@@ -1,0 +1,189 @@
+---
+title: "MCP"
+description: "Connect Blazar to Claude or another MCP-compatible client with the Blazar MCP server."
+---
+
+## Overview
+
+Blazar exposes a Model Context Protocol server so you can create researched tables from MCP-compatible clients. The server uses Streamable HTTP at `/mcp` and OAuth for user authorization.
+
+The MCP server currently provides one tool: `create_table`.
+
+## Prerequisites
+
+Before you connect, you need:
+
+- A Blazar account
+- The full `/mcp` server URL for your Blazar deployment
+- Claude Desktop, Claude.ai, or another MCP-compatible client
+- Node.js 20 or newer if you use the `mcp-remote` config-file setup
+
+Use this placeholder in the examples below:
+
+```text
+<MCP_SERVER_URL>
+```
+
+## Connect with Claude Connectors
+
+Use this path when your Claude client supports custom connectors.
+
+1. Open Claude Desktop or Claude.ai.
+2. Go to **Settings > Connectors > Add custom connector**.
+3. Paste your Blazar MCP server URL.
+4. Add the connector.
+5. Sign in to Blazar when Claude prompts you.
+
+After authorization, Claude can call Blazar's `create_table` tool.
+
+## Connect with a Claude Desktop config
+
+Use this path when you want Claude Desktop to connect through `mcp-remote`.
+
+1. Install `mcp-remote`.
+
+```bash
+npm install -g mcp-remote
+```
+
+2. In Claude Desktop, go to **Settings > Developer > Edit Config**.
+3. Add a Blazar MCP server entry.
+
+```json
+{
+  "mcpServers": {
+    "blazar": {
+      "command": "npx",
+      "args": ["mcp-remote", "<MCP_SERVER_URL>"]
+    }
+  }
+}
+```
+
+4. Save the config and restart Claude Desktop.
+5. Sign in to Blazar when Claude prompts you.
+
+You can rename the `blazar` key if you want the server to appear under a different name in your client.
+
+## Tool reference
+
+### `create_table`
+
+Use `create_table` to search the web, discover entities, and build a structured table with the fields you request.
+
+The tool expects:
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `entities` | array | Yes | Entity groups to discover |
+| `columns` | array | Yes | Data columns to extract for each entity |
+| `already_found` | array | No | Entity names already discovered in a previous call |
+
+Each item in `entities` includes:
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `description` | string | Yes | Concise search description for the entity group |
+| `entity_type` | string | Yes | Singular entity type, such as `company`, `person`, or `product` |
+| `count` | integer | Yes | Number of entities to find |
+| `criteria` | array | No | Filtering criteria for matching entities |
+
+Each item in `criteria` includes:
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `criterion` | string | Yes | One filtering condition |
+| `importance` | string | No | `compulsory` or `optional` |
+
+Each item in `columns` includes:
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `column_name` | string | Yes | Short column header |
+| `full_context` | string | Yes | What Blazar should extract for that column |
+
+<Tip>
+  Do not include a name or title column. Blazar returns the entity name as the first column automatically.
+</Tip>
+
+### Example tool arguments
+
+```json
+{
+  "entities": [
+    {
+      "description": "AI security companies in Europe",
+      "entity_type": "company",
+      "count": 10,
+      "criteria": [
+        {
+          "criterion": "headquartered in Europe",
+          "importance": "compulsory"
+        }
+      ]
+    }
+  ],
+  "columns": [
+    {
+      "column_name": "Website",
+      "full_context": "The company's official website URL"
+    },
+    {
+      "column_name": "Headquarters",
+      "full_context": "The company's headquarters location"
+    },
+    {
+      "column_name": "Funding",
+      "full_context": "The company's total funding amount, if available"
+    }
+  ]
+}
+```
+
+## Custom MCP clients
+
+Most clients handle initialization, OAuth, sessions, and streaming for you. If you build a custom client, use the Streamable HTTP endpoint:
+
+```text
+POST <MCP_SERVER_URL>
+GET <MCP_SERVER_URL>
+DELETE <MCP_SERVER_URL>
+```
+
+The server supports these JSON-RPC methods over `POST`:
+
+| Method | Description |
+| ------ | ----------- |
+| `initialize` | Returns server info and tool capabilities |
+| `ping` | Health check |
+| `tools/list` | Lists available tools |
+| `tools/call` | Calls `create_table` |
+| `notifications/*` | Accepted as notifications |
+
+For long-running `tools/call` requests, the server responds with Server-Sent Events and sends keep-alives plus progress notifications. The final event contains the created table name, table ID, row count, and returned rows.
+
+The server binds each MCP session to the authorized user. Reuse the `Mcp-Session-Id` response header on follow-up requests, and close the session with `DELETE` when your client is done.
+
+## OAuth endpoints
+
+The server exposes OAuth metadata and authorization endpoints for MCP clients on the same host:
+
+| Method | Path | Description |
+| ------ | ---- | ----------- |
+| `GET` | `/.well-known/oauth-authorization-server` | OAuth metadata |
+| `POST` | `/oauth/register` | Dynamic client registration |
+| `GET` | `/oauth/authorize` | Authorization code flow with PKCE |
+| `POST` | `/oauth/token` | Exchange authorization codes or refresh tokens |
+| `GET` | `/oauth/google` | Start Google sign-in for MCP authorization |
+| `GET` | `/oauth/callback` | Google OAuth callback |
+| `POST` | `/oauth/login` | Email/password sign-in during MCP authorization |
+
+## Troubleshooting
+
+| Problem | What to check |
+| ------- | ------------- |
+| Claude cannot connect | Confirm the MCP server URL points to `/mcp` for your deployment |
+| Sign-in fails | Make sure you complete the OAuth prompt in the same browser session |
+| Tool call fails with a token error | Your account needs available tokens or an enterprise plan |
+| Tool call times out | Use a client that supports Streamable HTTP or connect through `mcp-remote` |
+| The tool asks for columns | Add explicit `columns`; Blazar requires the data fields before it can create the table |

@@ -17,7 +17,7 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Documentation",
+        "tab": "GUI",
         "groups": [
           {
             "group": "Getting Started",
@@ -39,6 +39,28 @@
             "pages": [
               "features/sidebar",
               "features/history"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API",
+        "groups": [
+          {
+            "group": "Product API",
+            "pages": [
+              "api"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "MCP",
+        "groups": [
+          {
+            "group": "MCP",
+            "pages": [
+              "mcp"
             ]
           }
         ]
