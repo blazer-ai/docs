@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Blazar",
+  "name": "Hizura",
   "colors": {
     "primary": "#1b1913",
     "light": "#ffffff",
@@ -30,15 +30,18 @@
             "group": "Core Concepts",
             "pages": [
               "concepts/tables",
-              "concepts/queries",
-              "concepts/citations"
+              "features/pipeline",
+              "concepts/credits"
             ]
           },
           {
             "group": "Features",
             "pages": [
-              "features/sidebar",
-              "features/history"
+              "features/conversation",
+              "concepts/citations",
+              "features/emails",
+              "features/sharing",
+              "features/sidebar"
             ]
           }
         ]
@@ -75,7 +78,7 @@
     "primary": {
       "type": "button",
       "label": "Get started",
-      "href": "https://tryblazar.com"
+      "href": "https://hizura.com"
     }
   },
   "footer": {

@@ -1,189 +1,210 @@
 ---
 title: "MCP"
-description: "Connect Blazar to Claude or another MCP-compatible client with the Blazar MCP server."
+description: "Connect Hizura to Claude, Cursor, or any MCP client and build prospect lists, read them back, and sort them onto pipeline boards from the conversation."
 ---
 
 ## Overview
 
-Blazar exposes a Model Context Protocol server so you can create researched tables from MCP-compatible clients. The server uses Streamable HTTP at `/mcp` and OAuth for user authorization.
-
-The MCP server currently provides one tool: `create_table`.
-
-## Prerequisites
-
-Before you connect, you need:
-
-- A Blazar account
-- The full `/mcp` server URL for your Blazar deployment
-- Claude Desktop, Claude.ai, or another MCP-compatible client
-- Node.js 20 or newer if you use the `mcp-remote` config-file setup
-
-Use this placeholder in the examples below:
+Hizura runs a hosted Model Context Protocol server at:
 
 ```text
-<MCP_SERVER_URL>
+https://api.hizura.com/mcp
 ```
 
-## Connect with Claude Connectors
+Once it's connected, you can build a prospect list, read it back, and sort it onto a pipeline board without ever opening the app — just by asking. Transport is streamable HTTP, and it works with Claude Desktop, claude.ai, Claude Code, Cursor, Windsurf, VS Code, and any other MCP-compatible client.
 
-Use this path when your Claude client supports custom connectors.
+<Note>
+  **Sign-in is required, and there is no API key to paste.** The server is per-user and authenticated with OAuth. The first time your client connects, a Hizura sign-in page opens in the browser — email and password, or Continue with Google. Sign in with the account you use at [hizura.com](https://hizura.com) and the connection stays authorised.
+</Note>
 
-1. Open Claude Desktop or Claude.ai.
-2. Go to **Settings > Connectors > Add custom connector**.
-3. Paste your Blazar MCP server URL.
-4. Add the connector.
-5. Sign in to Blazar when Claude prompts you.
+No account yet? Signing up is free and takes a minute — the Free plan's 100 credits are enough to run a first real table.
 
-After authorization, Claude can call Blazar's `create_table` tool.
+## Connecting
 
-## Connect with a Claude Desktop config
+<Tabs>
+  <Tab title="Claude Desktop / claude.ai">
+    Nothing to install:
 
-Use this path when you want Claude Desktop to connect through `mcp-remote`.
+    1. Open **Settings → Connectors → Add custom connector**
+    2. Paste `https://api.hizura.com/mcp`
+    3. Click **Add**, and sign in when prompted on first use
+  </Tab>
+  <Tab title="Claude Code">
+    ```bash
+    claude mcp add --transport http hizura https://api.hizura.com/mcp
+    ```
+  </Tab>
+  <Tab title="Any other client">
+    Needs Node.js 20 or newer.
 
-1. Install `mcp-remote`.
+    ```bash
+    npm install -g mcp-remote
+    ```
 
-```bash
-npm install -g mcp-remote
-```
+    Then add to your client's MCP config:
 
-2. In Claude Desktop, go to **Settings > Developer > Edit Config**.
-3. Add a Blazar MCP server entry.
-
-```json
-{
-  "mcpServers": {
-    "blazar": {
-      "command": "npx",
-      "args": ["mcp-remote", "<MCP_SERVER_URL>"]
+    ```json
+    {
+      "mcpServers": {
+        "hizura": {
+          "command": "npx",
+          "args": ["mcp-remote", "https://api.hizura.com/mcp"]
+        }
+      }
     }
-  }
-}
-```
+    ```
 
-4. Save the config and restart Claude Desktop.
-5. Sign in to Blazar when Claude prompts you.
+    Restart the client and sign in when prompted. You can rename the `hizura` key to change how the server appears.
+  </Tab>
+</Tabs>
 
-You can rename the `blazar` key if you want the server to appear under a different name in your client.
+Once connected, `list_tables` is the quickest way to confirm the connection is live.
 
-## Tool reference
+## Tools
+
+| Tool | Costs credits | What it does |
+| ---- | ------------- | ------------ |
+| `create_table` | Yes | Researches the web and builds a new table |
+| `get_generation_status` | No | Checks on the run `create_table` started |
+| `list_tables` | No | Lists your tables |
+| `get_table` | No | Reads a table's rows |
+| `get_pipeline` | No | Reads a table's kanban board |
+| `configure_pipeline` | No | Creates or rewrites that board |
+| `move_cards` | No | Moves rows between steps |
+
+Only `create_table` spends anything. Everything else is free and instant.
 
 ### `create_table`
 
-Use `create_table` to search the web, discover entities, and build a structured table with the fields you request.
-
-The tool expects:
-
-| Field | Type | Required | Description |
-| ----- | ---- | -------- | ----------- |
-| `entities` | array | Yes | Entity groups to discover |
-| `columns` | array | Yes | Data columns to extract for each entity |
-| `already_found` | array | No | Entity names already discovered in a previous call |
-
-Each item in `entities` includes:
-
-| Field | Type | Required | Description |
-| ----- | ---- | -------- | ----------- |
-| `description` | string | Yes | Concise search description for the entity group |
-| `entity_type` | string | Yes | Singular entity type, such as `company`, `person`, or `product` |
-| `count` | integer | Yes | Number of entities to find |
-| `criteria` | array | No | Filtering criteria for matching entities |
-
-Each item in `criteria` includes:
-
-| Field | Type | Required | Description |
-| ----- | ---- | -------- | ----------- |
-| `criterion` | string | Yes | One filtering condition |
-| `importance` | string | No | `compulsory` or `optional` |
-
-Each item in `columns` includes:
-
-| Field | Type | Required | Description |
-| ----- | ---- | -------- | ----------- |
-| `column_name` | string | Yes | Short column header |
-| `full_context` | string | Yes | What Blazar should extract for that column |
+The main tool. You describe what you want in the chat and your assistant calls it — there's nothing for you to format.
 
 <Tip>
-  Do not include a name or title column. Blazar returns the entity name as the first column automatically.
+  **Make sure your assistant interviews you first.** The tool tells it to ask what columns you want, whether it should follow specific steps, and which criteria are compulsory before it runs anything — those three decide the quality of the result and can't be guessed. If it starts a run without asking, stop it and tell it to check with you first. A run takes several minutes and spends credits, so a question up front is far cheaper than the wrong table.
 </Tip>
 
-### Example tool arguments
+Runs take several minutes and spend credits. Depending on the client, the call either returns the finished table or reports that the run started in the background — in the latter case your assistant should follow up with `get_generation_status` rather than calling `create_table` again.
 
-```json
-{
-  "entities": [
-    {
-      "description": "AI security companies in Europe",
-      "entity_type": "company",
-      "count": 10,
-      "criteria": [
-        {
-          "criterion": "headquartered in Europe",
-          "importance": "compulsory"
-        }
-      ]
-    }
-  ],
-  "columns": [
-    {
-      "column_name": "Website",
-      "full_context": "The company's official website URL"
-    },
-    {
-      "column_name": "Headquarters",
-      "full_context": "The company's headquarters location"
-    },
-    {
-      "column_name": "Funding",
-      "full_context": "The company's total funding amount, if available"
-    }
-  ]
-}
-```
+### `get_generation_status`
+
+Takes no arguments. Reports whether a run is still going along with the steps completed so far, or how the last one finished and the id of the table it produced. Leave a gap between checks rather than polling tightly.
+
+### `list_tables`
+
+Takes no arguments. Returns each table's id, name, row count, and creation date.
+
+### `get_table`
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `table_id` | integer | Yes | The table to read |
+| `limit` | integer | No | Max rows to return (default 100, max 500) |
+| `offset` | integer | No | Rows to skip, for pagination (default 0) |
+| `all` | boolean | No | Return every row in one response, ignoring `limit` and `offset` |
+
+Large tables are paginated because cells carry verbose extracted data. Use `all` only when you genuinely need the whole dataset. Every row carries a `row_id`, which is what `move_cards` takes.
+
+### `get_pipeline`
+
+Takes a `table_id` and returns the board's ordered steps, the cards in each, and `availableColumns` — the column ids valid for `configure_pipeline`. If the table has no board yet, the result says so.
+
+### `configure_pipeline`
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `table_id` | integer | Yes | The table to configure |
+| `steps` | string[] | Yes | The **complete** ordered list of step names, left to right |
+| `card_columns` | string[] | Yes | Column ids to show on each card, in order. Empty array for name-only cards |
+
+<Warning>
+  `steps` is the complete list. Any step not in it is deleted and its cards fall back to the first step — so read the board with `get_pipeline` first and pass every existing step plus your new one. A step that keeps its name keeps its cards, so renaming or reordering one step is safe.
+</Warning>
+
+`card_columns` must be real column ids from `get_pipeline` or `get_table`. The entity name is always the card title and must never be listed.
+
+Pick steps that fit what the table is for — a sales list might use "To contact → Contacted → Moving forward → Success", a hiring list something else entirely. Your assistant is told to propose steps rather than assume a generic funnel, so say what your process actually looks like. Requires edit access.
+
+### `move_cards`
+
+Moves rows between steps. Pass every move in one call rather than one call per card — sorting a whole table is a single call. All moves are validated before any is applied, so an unknown row or step name rejects the entire call and nothing changes. Requires edit access.
+
+## A good workflow
+
+Building a list and working it is one conversation. Ask for what you want, and your assistant will:
+
+1. Confirm the connection is live with `list_tables`.
+2. Ask you about columns, steps, and criteria, then run `create_table` and wait on `get_generation_status`.
+3. Read the finished rows back with `get_table`.
+4. Set up stages that match your process with `configure_pipeline`, and place each account with `move_cards`.
+5. Come back to it — top the list up with `already_found`, and advance accounts as their situation changes.
+
+Step 5 is the one that matters. The first four build something; the fifth is the agent *working* it, and it has no end state. Because the board holds the current position of every account, an agent can pick the thread up days later and know exactly where everything stood — which is what makes this a standing motion rather than a one-off favour.
+
+### Hizura as one server among several
+
+The bigger version is what happens when Hizura isn't the only thing your agent can reach.
+
+Hizura holds the pipeline — who the accounts are, what's known about them, and what stage each one is at. That's exactly the context an agent needs to do the work *between* stages. Connect its mail and calendar tools alongside this server and one agent can pick the next account off the board, do the outreach, book the call, and move the card. The board decides what it picks up next. Each stage you defined says what the accounts in it are waiting for, so the agent takes its work from the board rather than from a list you keep somewhere else. Move a card and you've changed what it does next.
+
+Shared state is what makes that safe to delegate. The table is one object — its rows, its researched values, and its stages are the same for everyone with access. An agent advancing a deal and a rep dragging a card are acting on the same thing, so you're never reconciling two versions of the truth, and you can always see what your agents did.
+
+<Note>
+  Hizura doesn't send mail or book anything — it's the workspace and the pipeline. The acting comes from your agent's own tools; what this server contributes is who to act on and what has already happened.
+</Note>
+
+### Keeping a list topped up
+
+`create_table` takes `already_found` — names you've discovered before, which it skips. Re-running the same brief against an existing list therefore returns only **net-new** entities, with no duplicates to reconcile afterwards.
+
+That turns a one-off list into a standing workflow. Read the current names with `get_table`, pass them as `already_found`, and run the same ICP brief again:
+
+> "Every Monday, top up my EU fintech list with companies I don't already have, qualify each one, and drop the good ones in To contact."
+
+<Tip>
+  Only `create_table` spends credits. Reading, qualifying, boarding, and re-sorting are free and instant, so an agent can revisit and re-organise a list as often as it's useful — the cost is in the research, and you only pay that for entities you didn't already have.
+</Tip>
+
+### What isn't here
+
+Email enrichment and per-row edits aren't MCP tools. Do those in the app, or through the [API](/api) if you're scripting the entire pipeline on an Enterprise plan.
+
+<Note>
+  A board built this way is shared — every collaborator has the same steps and card placements. Which view each person has open is personal, though, so building a board doesn't move anyone onto it. Open the table and switch to the pipeline to see it.
+</Note>
 
 ## Custom MCP clients
 
-Most clients handle initialization, OAuth, sessions, and streaming for you. If you build a custom client, use the Streamable HTTP endpoint:
+Most clients handle initialization, OAuth, sessions, and streaming for you. If you're building your own, the streamable HTTP endpoint accepts:
 
 ```text
-POST <MCP_SERVER_URL>
-GET <MCP_SERVER_URL>
-DELETE <MCP_SERVER_URL>
+POST   https://api.hizura.com/mcp
+GET    https://api.hizura.com/mcp
+DELETE https://api.hizura.com/mcp
 ```
 
-The server supports these JSON-RPC methods over `POST`:
+Long-running `tools/call` requests respond with Server-Sent Events, sending keep-alives and progress notifications until the final event.
 
-| Method | Description |
-| ------ | ----------- |
-| `initialize` | Returns server info and tool capabilities |
-| `ping` | Health check |
-| `tools/list` | Lists available tools |
-| `tools/call` | Calls `create_table` |
-| `notifications/*` | Accepted as notifications |
+Each session is bound to the authorized user. Reuse the `Mcp-Session-Id` response header on follow-up requests, and close the session with `DELETE` when you're done.
 
-For long-running `tools/call` requests, the server responds with Server-Sent Events and sends keep-alives plus progress notifications. The final event contains the created table name, table ID, row count, and returned rows.
-
-The server binds each MCP session to the authorized user. Reuse the `Mcp-Session-Id` response header on follow-up requests, and close the session with `DELETE` when your client is done.
-
-## OAuth endpoints
-
-The server exposes OAuth metadata and authorization endpoints for MCP clients on the same host:
+### OAuth endpoints
 
 | Method | Path | Description |
 | ------ | ---- | ----------- |
-| `GET` | `/.well-known/oauth-authorization-server` | OAuth metadata |
+| `GET` | `/.well-known/oauth-authorization-server` | Authorization server metadata |
+| `GET` | `/.well-known/oauth-protected-resource` | Protected resource metadata |
 | `POST` | `/oauth/register` | Dynamic client registration |
 | `GET` | `/oauth/authorize` | Authorization code flow with PKCE |
 | `POST` | `/oauth/token` | Exchange authorization codes or refresh tokens |
-| `GET` | `/oauth/google` | Start Google sign-in for MCP authorization |
+| `POST` | `/oauth/login` | Email and password sign-in during authorization |
+| `GET` | `/oauth/google` | Start Google sign-in |
 | `GET` | `/oauth/callback` | Google OAuth callback |
-| `POST` | `/oauth/login` | Email/password sign-in during MCP authorization |
 
 ## Troubleshooting
 
 | Problem | What to check |
 | ------- | ------------- |
-| Claude cannot connect | Confirm the MCP server URL points to `/mcp` for your deployment |
-| Sign-in fails | Make sure you complete the OAuth prompt in the same browser session |
-| Tool call fails with a token error | Your account needs available tokens or an enterprise plan |
-| Tool call times out | Use a client that supports Streamable HTTP or connect through `mcp-remote` |
-| The tool asks for columns | Add explicit `columns`; Blazar requires the data fields before it can create the table |
+| The client can't connect | Confirm the URL ends in `/mcp` and your client supports streamable HTTP — otherwise connect through `mcp-remote` |
+| Sign-in fails | Complete the OAuth prompt in the same browser session it opened in |
+| A tool call fails on credits | Your balance is empty — see [Credits](/concepts/credits) |
+| `create_table` seems to hang | It's running in the background; switch to `get_generation_status` |
+| A second `create_table` is rejected | One run at a time per account. Wait for the first to finish |
+| `configure_pipeline` dropped steps | You passed a partial list. Read `get_pipeline` and resend every step |

@@ -1,79 +1,138 @@
 ---
 title: "Quickstart"
-description: "Create your first research table in Blazar."
+description: "Build your first prospect list in Hizura — from an ICP described in plain language to a workable table."
 ---
 
-## Create your first research table
+## Before you start
 
-Follow these four steps to go from a blank workspace to a fully populated, cited data table.
+You need a Hizura account. The Free plan includes a one-time grant of 100 credits and no card, which is enough to build a real list.
 
-### Step 1: Create a new table
+## Build your first list
 
-When you first open Blazar, you'll see an empty workspace. Click **Create new table** or use the keyboard shortcut:
+### Step 1: Create a table
+
+Open Hizura and click **Create new table**, or use the keyboard shortcut:
 
 - **Mac:** `Cmd` + `;`
 - **Windows/Linux:** `Ctrl` + `;`
 
-<Frame caption="The Blazar empty state with the 'Create new table' shortcut.">
-  <img src="/images/empty-state.png" alt="Blazar empty workspace showing the Blazar logo and Create new table shortcut" />
+<Frame caption="The Hizura empty state with the 'Create new table' shortcut.">
+  <img src="/images/empty-state.png" alt="Hizura empty workspace showing the logo and Create new table shortcut" />
 </Frame>
 
 ### Step 2: Name your table
 
-After creating a table, you'll see an editable title field at the top. Click it and type a descriptive name for your research — for example, "AI SaaS Companies in Europe."
+An editable title field appears at the top. Give the table a name that describes the segment — for example, "EU fintech ICP". Press **Enter** to confirm and move to the input field.
 
-Press **Enter** to confirm the name and move to the query input.
+### Step 3: Describe your ICP
 
-### Step 3: Enter your query
-
-In the input field, describe what you want to research in plain language. Be specific about the entities you want, any constraints, and the data points you need extracted.
-
-**Example query:**
+Type it in plain language. State who you're targeting, any criteria they must meet, and every field you want as a column:
 
 ```text
-Find 10 companies in AI SaaS based in Europe.
+Find 10 B2B fintech companies.
+
+Criteria:
+1. Headquartered in the EU (compulsory)
+2. Preferably Series A or later (optional)
 
 For each company, extract:
-- Website
-- Headquarters location
-- Key products or services
-- Founded year
+- Website(e.g. https://example.com)
+- Headquarters location(e.g. Berlin, Germany)
+- What they sell
 - Employee count
-- Contact email
-- LinkedIn company page
+- LinkedIn company page(link)
 ```
 
-Press `Cmd` + `Enter` (Mac) or `Ctrl` + `Enter` (Windows/Linux) to submit your query. Blazar will interpret it, research the web, and populate your table with structured results.
+Press `Cmd` + `Enter` (Mac) or `Ctrl` + `Enter` (Windows/Linux) to submit.
 
 <Tip>
-  The more specific your query, the better your results. See [Writing effective queries](/concepts/queries) for tips and templates.
+  You don't have to write a full brief. Send a one-liner like "find me some fintech startups to sell to" and Hizura will interview you instead — see [Conversation](/features/conversation).
 </Tip>
 
-### Step 4: Review your results
+### Step 4: Confirm scope and price
 
-Once Blazar finishes researching, your table appears with:
+If your request leaves anything open, the [clarifier](/features/conversation) asks a short batch of questions before spending credits — which fields you want, whether it should follow specific steps, and which criteria are compulsory.
 
-- **Rows** for each entity found (e.g., individual companies)
-- **Columns** for each field you requested (e.g., website, headquarters, employee count)
-- **Citations** linked to every cell — click any cell to see its sources
+The last question is always how many rows you want, with the real credit cost next to each option:
 
-<Frame caption="A completed Blazar table with research results and citations.">
-  <img src="/images/example-table.png" alt="Blazar table showing entities, columns, result values, and a citation panel on the right" />
-</Frame>
+```text
+Roughly how many rows are you looking for?
+  5                                    35 credits
+  10                                   70 credits
+  As much as possible (~40 rows, up to 280 credits)
+```
+
+Hizura then shows you the assembled brief. **Edit it if anything's off** — reword a criterion, drop a column, add a `Steps:` block — because what you approve is what runs.
+
+No credits are spent until you approve the brief, and even then you're only billed for cells the run actually delivers.
+
+### Step 5: Watch the run
+
+Hizura streams its progress while it works — planning, searching the web, visiting pages, and a running count of entities completed. Runs take several minutes.
+
+You can safely reload the page or close the tab. The run continues on the server, and Hizura reconnects you to it when you come back.
+
+### Step 6: Read the results
+
+When the run finishes, a summary strip reports what you got and what it cost:
+
+```text
+Delivered 18 rows · 47 credits spent · Found everything you asked for
+```
+
+If you'd rather not see it, the `/summaryVisibility` command hides it — and keeps it hidden for future runs until you turn it back on. It's a per-person setting, so hiding it doesn't take it off a teammate's screen.
+
+Your [table](/concepts/tables) has a row per entity, a column per field you requested, and sources on every researched value. Click a cell, or press `Cmd` + `0`, to open the citation panel and see which pages the value came from.
+
+### Step 7: Work the list
+
+A list you can't action isn't worth much, so finish the loop:
+
+- **Add contacts.** Select the rows worth pursuing and run [`/enrichEmails`](/features/emails) to get verified work emails for them. You're billed only for addresses actually found, so enrich the shortlist rather than the whole table.
+- **Move them through stages.** Switch to [the pipeline](/features/pipeline), set up steps that match how your team sells, and drag leads across as they progress.
+- **Take it elsewhere when you need to.** Export to CSV or XLSX, or read the table through the [API](/api) or [MCP](/mcp).
+
+#### Bring in your team
+
+Share the table from the copy menu in the header — pick **read-only** or **can edit**, then send the link. Every plan includes unlimited team members, so this isn't metered.
+
+Your teammates share the work, not your screen: everyone sees the same rows, the same pipeline steps, and the same card placements, so moving a lead to "Contacted" is visible to the whole team. Column widths, which view you're in, and card density stay yours alone — nobody's layout moves when someone else reorganises theirs.
+
+Credits stay personal too. A teammate running their own research on a shared table spends **their** balance, not yours, and doesn't block you from running something at the same time.
+
+See [Sharing & exporting](/features/sharing) for access levels and how to revoke one.
+
+#### Hand it to an agent
+
+Everything above is something an agent can do for you. Connect the [MCP server](/mcp) and your assistant works the same table you're looking at — topping the list up with accounts you don't have yet, qualifying them against your criteria, and advancing them through your stages.
+
+That's the point of keeping the pipeline here rather than in a spreadsheet: your agents can reach it. Give one the rest of its toolbelt and the work between stages gets handled too — the outreach sent, the call booked, the card moved — while you review what happened rather than doing it.
+
+<Tip>
+  Only `create_table` spends credits. Reading, qualifying, boarding, and re-sorting are free and instant, so there's no cost to letting an agent keep a list organised.
+</Tip>
+
+Boards an agent builds are shared, so you and your team see the result.
 
 ## Next steps
 
 <Columns cols={2}>
-  <Card title="Tables" icon="table" href="/concepts/tables">
-    Learn how to manage multiple tables and organize your research.
+  <Card title="Clarifier" icon="comments" href="/features/conversation">
+    How the interview works, and how to edit the brief before it runs.
   </Card>
-  <Card title="Queries" icon="pen" href="/concepts/queries">
-    Write better queries to get more precise results.
+  <Card title="Credits" icon="coins" href="/concepts/credits">
+    Understand per-cell billing and why a run stopped where it did.
   </Card>
-  <Card title="Citations" icon="quote-left" href="/concepts/citations">
-    Understand how to verify and use cited sources.
+  <Card title="Pipeline" icon="diagram-project" href="/features/pipeline">
+    Turn the table into a kanban board and work the rows.
   </Card>
-  <Card title="Sidebar" icon="sidebar" href="/features/sidebar">
-    Navigate between your tables with the sidebar.
+  <Card title="Find emails" icon="envelope" href="/features/emails">
+    Add verified corporate emails to selected rows.
+  </Card>
+  <Card title="Sharing & exporting" icon="users" href="/features/sharing">
+    Access levels, collaborators, and exporting your lists.
+  </Card>
+  <Card title="MCP" icon="plug" href="/mcp">
+    Let an assistant build and sort your lists from the chat.
   </Card>
 </Columns>

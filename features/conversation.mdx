@@ -1,0 +1,115 @@
+---
+title: "Clarifier & conversation"
+description: "The clarifier agent interviews you, prices the run, and writes a brief you can edit before spending a credit — and every table keeps that conversation."
+---
+
+## Overview
+
+You never have to work out how to phrase a request. Send Hizura whatever you have — a one-liner is fine — and the **clarifier**, the agent sitting in front of every run, interviews you, asking only what it genuinely doesn't know, then writes the brief for you to review, edit, and approve.
+
+Its job is to stop you paying for the wrong list. A run takes several minutes and spends credits, so the clarifier front-loads every decision that would otherwise only surface once the results came back wrong.
+
+Every table keeps that conversation. The **Conversation** view is a read-only record of how the table came to be, reachable from the view toggle in the table header.
+
+<Note>
+  You need credits to start an interview at all. An interview you couldn't act on isn't worth your time, so the clarifier checks your balance before the first question rather than after the last.
+</Note>
+
+## The interview
+
+Send something vague:
+
+```text
+find me some AI startups to sell to
+```
+
+Instead of guessing, the clarifier asks. Questions arrive in **batches** — everything currently unknown at once, rather than one at a time — so you're not waiting on a round trip per question. A second batch follows only if one of your answers opened something new.
+
+### What it asks about
+
+| Topic | Why it asks |
+| ----- | ----------- |
+| **Fields** | Which columns you want. The clarifier never guesses columns — a table of the wrong fields is a wasted run. |
+| **Steps** | Whether it should follow a specific route. It can plan its own, but a supplied workflow is followed exactly and works better. |
+| **Criteria** | What entities must or should satisfy, and which conditions are compulsory versus optional. |
+
+It asks about steps and criteria even when you haven't mentioned either, because those are the two things that most often turn a mediocre run into a good one.
+
+### Answering
+
+Each question offers options you can pick from — some accept several at once — plus a free-text row for anything the options don't cover.
+
+<Note>
+  There's deliberately no "Other" option. The free-text row *is* the other, so you're never forced into a bad fit.
+</Note>
+
+### Changing an earlier answer
+
+You can go back and change an answer while the interview is open. Questions asked **in the same batch** survive the change — they were written without knowledge of each other's answers, so they can't be invalidated by one of them. Only the batches that came *after* are discarded and asked again, since those were written in light of the answer you just changed.
+
+To leave an interview entirely, press `Esc` to discard it. That's the only way out of one in progress — the clarifier won't silently drop you into a run you didn't confirm.
+
+### The last question is always price
+
+Once the clarifier knows what you want, it asks how many rows — with the real credit cost of each option against your current balance:
+
+```text
+Roughly how many rows are you looking for?
+  5                                    35 credits
+  10                                   70 credits
+  As much as possible (~40 rows, up to 280 credits — all of your remaining balance)
+```
+
+You can type your own number instead of picking an option; it's re-checked against your balance either way. "As much as possible" makes the run open-ended — it keeps going until the web is exhausted or your budget is.
+
+The per-row cost comes from the columns you asked for, so dropping an expensive column (a verified email, say) lowers it.
+
+### Reviewing and editing the brief
+
+The clarifier then shows you the assembled brief:
+
+```text
+Find 25 AI B2B SaaS companies.
+
+Criteria:
+1. Headquartered in the EU (compulsory)
+
+For each company, extract:
+- Website
+- Headquarters
+- Employee count
+```
+
+**This is a draft, and you can edit it before running.** Change the wording, add a criterion, drop a column, paste in a `Steps:` block — whatever the interview didn't capture. What you approve is what runs, and Hizura keeps both versions so the Conversation view can show what the clarifier proposed alongside what you actually ran.
+
+No credits are spent until you approve the brief. Abandoning an interview costs nothing, however many questions you answered.
+
+### If you can't afford the run
+
+If your balance can't cover even one row with the columns you asked for, the clarifier says so instead of starting a run it can't finish — and tells you the per-row cost, so you can drop a column or top up. That's an outcome, not an error.
+
+### Resuming
+
+An unfinished interview is waiting for you if you navigate away and come back — for up to **24 hours**, after which a stale interview stops reopening and you get a clean input instead.
+
+## The Conversation view
+
+Switch any table to **Conversation** to see the record behind it: the request you sent, every question asked, the answers you gave, the brief that ran, and what each run cost.
+
+Questions are replayed **exactly as they were shown to you** — the original wording, option labels, and the prices quoted at the time. That's stored rather than regenerated, so what you see is what you were actually asked, not a model's fresh attempt at the same question.
+
+Use it to remember why a table looks the way it does, to recover a brief so you can adapt it for a new table, or — on a [shared table](/features/sharing) — to see what a teammate asked for.
+
+<Note>
+  Collaborators see the conversation, but not the money. Credit costs and the balance-derived pricing behind the row-count question are stripped for everyone except the table's owner.
+</Note>
+
+### Tables without an interview
+
+Not every table has a clarifier thread. Tables created before the interview existed, tables built over [MCP](/mcp), and tables imported from JSON never had one — for those, the Conversation view replays the **runs** instead: the brief each one used and how it finished.
+
+Hizura deliberately doesn't claim where those requests came from. Nothing recorded whether a given brief was typed or arrived over MCP, and inferring it from the text would be a guess presented as a fact.
+
+<Info>
+  The Conversation view replaced the old change-history panel and its `Cmd` + `\` shortcut. Per-action logging of added rows and columns is no longer tracked.
+</Info>
