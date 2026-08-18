@@ -1,0 +1,73 @@
+---
+title: "Pipeline"
+description: "Turn any Hizura table into a kanban board and work the rows through steps you define."
+---
+
+## Overview
+
+The pipeline is the same table seen as a kanban board: you define the **steps**, and every row becomes a **card** sitting in one of them. It's how you work a researched list rather than just read it, moving each row through the stages you define as things progress.
+
+Switch to it with the pipeline icon in the table header. Boards are free and instant: configuring one, moving cards, and reading a board never cost credits.
+
+## Setting up a board
+
+The first time you open the pipeline on a table, Hizura asks you to set up its steps.
+
+Pick steps that fit what the table is actually for. A sales table might use **To contact → Contacted → Moving forward → Success**; a hiring table or a fundraising list wants something else entirely. There's no fixed funnel.
+
+You also choose which columns appear on each card. The entity name is always the card title, so you never pick it as a card column.
+
+<Note>
+  Setting up or changing a board needs edit access. If you're a read-only collaborator on a table that has no board yet, the pipeline toggle stays disabled — ask the table's owner to set one up.
+</Note>
+
+## Working the board
+
+- **Move a card** by dragging it to another step
+- **Reorder steps** by dragging their headers
+- **Rename a step** by clicking its title and typing — a renamed step keeps its cards
+- **Delete a step** once it's empty
+- **Collapse a step** by double-clicking its header
+
+Each step header shows a live count of the cards in it.
+
+## Card density
+
+The toggle beside the view switch controls how much each card shows:
+
+| Mode | Shows |
+| ---- | ----- |
+| **Show columns** | The entity name plus the card columns you chose |
+| **Show name only** | Just the entity name — a compact board for long lists |
+
+Use the `/pipelineViewCols` command to change which columns appear on cards.
+
+## What's shared and what isn't
+
+This distinction matters on a [shared table](/features/sharing):
+
+| Shared with everyone | Yours alone |
+| -------------------- | ----------- |
+| The steps and their order | Whether you're looking at the table, board, or conversation |
+| Which step each card is in | Card density |
+| Which columns show on cards | Column widths and order in table view |
+
+So moving a card is a change your teammates see, but switching yourself to board view doesn't move anyone else's screen.
+
+## Driving the board from an MCP client
+
+Boards are fully controllable over [MCP](/mcp):
+
+- `get_pipeline` — read the steps, the cards in each, and the column ids valid for cards
+- `configure_pipeline` — create or rewrite the board's steps
+- `move_cards` — move many rows between steps in a single call
+
+Sorting a whole table into steps in one call is the small version of this. The real one is that the board becomes the surface your agents work through.
+
+`get_pipeline` hands an agent exactly what it needs to act: who the accounts are, what's known about each, and what stage every one of them is at. Give it the rest of its toolbelt — mail, calendar, whatever else it can reach — and it can work through a stage, doing whatever that stage calls for, then move each card to reflect what actually happened. Your steps are what assign the work — an account's stage says what it's waiting for — and moving it on is how the agent reports back.
+
+What you're left with is a board that records what your agents did, in the same place your team already looks. You read it and correct it rather than operating it — and because it's one shared object, a rep dragging a card and an agent moving one are the same action on the same thing.
+
+<Warning>
+  `configure_pipeline` takes the **complete** ordered list of steps. Any step you leave out is deleted and its cards fall back to the first step — so read the board with `get_pipeline` first and pass every existing step plus your new one.
+</Warning>

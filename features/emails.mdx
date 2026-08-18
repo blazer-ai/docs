@@ -1,0 +1,76 @@
+---
+title: "Finding emails"
+description: "Add verified corporate email addresses to selected rows with Hizura's built-in email finder."
+---
+
+## Overview
+
+Hizura has a built-in email finder — a real one, not an open-web search for anything shaped like an address. It resolves the person's company domain, works out the likely address, and then **verifies that the mailbox actually exists** before handing it to you.
+
+That verification step is the difference between a list your reps can send to and one that burns your domain reputation on bounces.
+
+You can get emails two ways:
+
+1. **As part of a run** — ask for an email column when you describe what you want, and Hizura fills it while it researches
+2. **On existing rows** — run the finder over rows you already have, without re-running the research
+
+<Note>
+  The email finder requires a paid plan. It isn't available on the Free plan.
+</Note>
+
+## Finding emails for existing rows
+
+This is the common case: you have a researched table of people and you want addresses for some of them.
+
+1. Type `/enrichEmails` in the input field and press **Enter**
+2. Select the rows you want — tick them in the table
+3. Click **Find emails** (the button shows how many rows you selected)
+
+Hizura works through your selection and fills each row in as it goes, so you see results arriving rather than waiting for the whole batch.
+
+<Tip>
+  Select only the rows you actually need. You're billed per delivered email, so enriching 12 rows out of 200 costs a fraction of enriching all of them.
+</Tip>
+
+
+## Reading the result
+
+Each row comes back one of two ways — the address, marked verified, or nothing:
+
+| Result | Meaning |
+| ------ | ------- |
+| **Verified** | The mailbox was confirmed to exist. Safe to send to |
+| **Not found** | No deliverable address could be confirmed for that person |
+
+There's no middle category to interpret. Catch-all domains — where the server accepts anything and a naive checker can't tell a real mailbox from a fake one — are resolved rather than handed to you as a maybe.
+
+Rows that came back empty say why:
+
+| Reason | What it means |
+| ------ | ------------- |
+| No company domain | The person's employer couldn't be resolved to a domain |
+| Unparseable name | The name cell isn't a usable person name |
+| Lookup failed | The lookup itself errored — worth retrying |
+| Insufficient credits | Your balance ran out partway through the selection |
+
+## What it costs
+
+A delivered verified email cell costs **3 credits**. Rows where no email was found cost **nothing** — you're billed only for addresses you actually receive.
+
+If your balance runs out mid-selection, Hizura stops and marks the remaining rows rather than charging you for partial work. See [Credits](/concepts/credits).
+
+## Getting emails during a run
+
+To collect addresses as part of the original research, just ask for the column:
+
+```text
+Find 20 e-commerce companies with 10-100 employees in the United States.
+
+For each company, extract:
+- Website(e.g. https://example.com)
+- Contact email
+- Decision-maker LinkedIn profile(link)
+- Company description
+```
+
+Email columns are priced at 3 credits per delivered cell here too, which is why the interview's row-count question quotes a higher per-row cost when your brief includes one.

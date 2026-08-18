@@ -1,61 +1,68 @@
 ---
 title: "Tables"
-description: "How Blazar organizes your research into structured, manageable tables."
+description: "How Hizura organizes a list into a structured table, and the three ways to work with one."
 ---
 
-## What is a Blazar table?
+## What a table is
 
-A table is the core unit of research in Blazar. Each table represents a single research question and contains the structured data that Blazar's AI agents find on the web.
+A table is the core unit of work in Hizura. Each table holds one segment — one ICP, one account list, one research question — and the structured data behind it.
 
 A table consists of:
 
-- **A name** — a descriptive title you give to your research (e.g., "AI SaaS Companies in Europe")
-- **Rows** — one for each entity that matches your query (e.g., individual companies)
-- **Columns** — one for each data point you asked for (e.g., website, headquarters, employee count)
-- **Cells** — each cell contains a researched value with one or more [citations](/concepts/citations)
-
-<Frame caption="A Blazar table with rows for entities and columns for data points.">
-  <img src="/images/example-table-no-citations.png" alt="Blazar table showing entity rows, data columns, and result values" />
-</Frame>
+- **A name** — a descriptive title for the segment
+- **Rows** — one per entity found (e.g. individual companies)
+- **Columns** — one per field you asked for
+- **Cells** — each researched value, with the [citations](/concepts/citations) behind it
 
 ## Creating a table
 
-You can create a new table in two ways:
+You can create a table in three ways:
 
-1. **Click "Create new table"** in the empty workspace
-2. **Use the keyboard shortcut:** `Cmd` + `;` (Mac) or `Ctrl` + `;` (Windows/Linux)
+1. Click **Create new table** in the empty workspace
+2. Press `Cmd` + `;` (Mac) or `Ctrl` + `;` (Windows/Linux)
+3. Click the add button in the [sidebar](/features/sidebar)
 
-You can also create additional tables from the [sidebar](/features/sidebar) using the add button.
+The first column is always the entity name — Hizura fills it in automatically, and you never request it in a brief.
 
-## Naming your table
+## Cell types
 
-When you create a table, a title field appears at the top of the workspace. Click it to type your table name. A good table name describes the research question — it helps you identify the table later when you have multiple tables.
+Not every cell holds the same kind of value. Hizura picks the shape from what the column is for:
 
-**Examples of good table names:**
+| Cell type | What it holds |
+| --------- | ------------- |
+| Researched value | The value plus the sources it came from — click to inspect |
+| Link | A bare URL, rendered as a chip or in full (your choice) |
+| Email | A work address that's been verified as deliverable, or nothing if none could be confirmed |
+| Grouped | Several sub-rows inside one cell, when an entity has multiple of something (e.g. several founders) |
 
-- "European AI startups founded in 2025"
-- "Best laptop models under $1000"
+Cells are editable. Click into one to edit it directly; the editor handles multi-line values.
 
-Press **Enter** after naming your table to move to the query input field.
+## Views
 
-## Table structure
+The same table can be viewed three ways, using the toggle in the table header:
 
-Blazar automatically determines the table structure based on your query:
+<Columns cols={3}>
+  <Card title="Table" icon="table">
+    The default grid of rows and columns.
+  </Card>
+  <Card title="Pipeline" icon="diagram-project" href="/features/pipeline">
+    A kanban board where each row is a card sitting in one of your steps.
+  </Card>
+  <Card title="Conversation" icon="comments" href="/features/conversation">
+    A read-only record of how the table came to be.
+  </Card>
+</Columns>
 
-| Component | What it represents | Example |
-| --------- | ------------------ | ------- |
-| Rows | Entities that match your query | Notion, Figma, Datadog |
-| Columns | Data points you asked for | Website, headquarters, employee count |
-| Cells | Researched values with sources | "San Francisco, CA" with citation |
+## Display preferences are per-viewer
 
-Each cell is not just a value — it includes the source URL and the exact text passage that supports the data. You can inspect any cell's citations by clicking on it or pressing `Cmd` + `0`. See [Citations](/concepts/citations) for more details.
+Column widths, column order, view mode, URL style, and whether the run summary banner shows are all stored per user, per table. Two people can look at the same shared table with completely different layouts, and neither disturbs the other.
 
-You can also add rows (`Cmd` + `[`) and columns (`Cmd` + `]`) to an existing table using keyboard shortcuts.
+You can reorder rows by dragging them, and resize or reorder columns directly in the header.
 
 ## Managing multiple tables
 
-You can create multiple tables and switch between them using the [sidebar](/features/sidebar). Each table retains its data independently.
+Create as many tables as you like and switch between them from the [sidebar](/features/sidebar). Each keeps its own data, pipeline, and conversation.
 
 <Warning>
-  Blazar runs one research at a time. While a research is in progress, you cannot switch to another table. Wait for the current research to complete before navigating away.
+  Hizura runs one research at a time per account, so you can't start a second run while one is going. You can still move around freely — switch tables, read other results, work a board — and the run carries on regardless. Reloading or closing the tab doesn't stop it either; Hizura reconnects you to it when you come back.
 </Warning>

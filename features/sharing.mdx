@@ -1,0 +1,72 @@
+---
+title: "Sharing & exporting"
+description: "Share a Hizura table with a link, manage who can change it, and export the results to CSV, XLSX, Markdown, or JSON."
+---
+
+## Overview
+
+Any table you own can be shared with a link, and any table you can see can be exported. Every plan includes unlimited team members and free export, so neither is metered.
+
+Access is granted one table at a time. Someone you share a table with sees that table and nothing else — every other table you own stays private.
+
+## Sharing a table
+
+Open the copy menu in the table header and choose **Copy URL**. Before you copy, pick what the link should grant:
+
+- **read-only** — the recipient can look, not change
+- **can edit** — the recipient can change the table's contents
+
+Send the copied link. Anyone who opens it while signed in to Hizura becomes a collaborator on that table at the level you chose.
+
+<Note>
+  Only the table's owner can create a share link. Collaborators can open and export the table, but the **Copy URL** option doesn't appear for them.
+</Note>
+
+The share and team controls sit in the table header, and are hidden while you're in [the pipeline](/features/pipeline) — that corner belongs to the board's card-density toggle. Switch out of the pipeline to reach them.
+
+## Managing collaborators
+
+The team button in the header lists everyone with access. The owner appears as **admin** and can't be changed. For anyone else, click their row and pick a level:
+
+| Level | Can do | Cannot do |
+| ----- | ------ | --------- |
+| **admin** (owner) | Everything, including deleting the table and managing collaborators | — |
+| **can edit** | Edit cells, add and remove rows, run email enrichment, configure the pipeline and move cards | Delete the table, manage collaborators, create share links |
+| **read-only** | Read the table, its citations and its conversation; export it; keep their own layout | Change any shared content |
+| **no access** | — | Anything; the table disappears from their sidebar |
+
+Changes apply immediately. Setting someone to **no access** is how you revoke a share.
+
+<Info>
+  A table you have no access to is indistinguishable from one that doesn't exist. That's deliberate — it stops anyone probing for tables they aren't part of.
+</Info>
+
+## What collaborators share
+
+On a shared table, some things are common and some stay yours:
+
+| Everyone sees the same | Each person keeps their own |
+| ---------------------- | --------------------------- |
+| Rows, columns, and cell values | Table / pipeline / conversation view choice |
+| Pipeline steps and where each card sits | Column widths and column order |
+| Which columns show on pipeline cards | Card density on the board |
+| The conversation behind the table | URL display style, run summary visibility |
+
+So a teammate reorganising their columns never disturbs your layout, while moving a pipeline card is a change the whole team sees.
+
+## Exporting
+
+The same copy menu exports the table, and every format is free:
+
+| Option | Use it for |
+| ------ | ---------- |
+| **Export CSV** | Spreadsheets, and importing into other systems |
+| **Export XLSX** | Excel, with the table's structure preserved |
+| **Copy Markdown** | Pasting into docs, tickets, or a chat |
+| **Copy JSON** | Feeding the results into your own tooling |
+
+Exports carry the researched values. To work with the data programmatically read the table through the [API](/api) or the [MCP server](/mcp) instead.
+
+## Sharing and runs
+
+The one-run-at-a-time limit is per account, not per table. A collaborator running research on a table you share doesn't block you from starting your own, and their run spends **their** credits, not yours.

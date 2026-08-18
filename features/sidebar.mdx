@@ -1,47 +1,22 @@
 ---
-title: "Sidebar"
-description: "Navigate and manage your research tables with the Blazar sidebar."
+title: "Shortcuts & commands"
+description: "Drive Hizura from the keyboard, navigate your tables from the sidebar, and use slash commands in the input field."
 ---
 
-## Overview
+## The sidebar
 
-The sidebar is your workspace navigator. It lists all your tables, lets you switch between them, and provides controls for creating new research.
+The sidebar lists every table you have access to and lets you switch between them. It's open by default; toggle it with `Cmd` + `.` to give the table more room.
 
-## Opening and closing the sidebar
-
-The sidebar is open by default. You can toggle it to give your table more screen space:
-
-- Click the **sidebar toggle** button, or press `Cmd` + `.` (Mac) / `Ctrl` + `.` (Windows)
-- When collapsed, the main content area expands to fill the available space
-
-## Managing tables
-
-The sidebar displays all your tables in a list. Each entry shows the table name you assigned when you created it.
-
-### Switching between tables
-
-Click any table in the sidebar to switch to it. Your current table's data is preserved.
+- **Switch tables** — click any table in the list. The active one is highlighted.
+- **Create a table** — click the add button, or press `Cmd` + `;`. Hizura switches to the new table automatically.
 
 <Warning>
-  Switching is blocked while a research is in progress. Wait for the current research to complete before navigating to another table.
+  You can switch tables freely while a run is going — it carries on in the background, and keeps going even if you reload or close the tab. What you can't do is start a second run before the first finishes.
 </Warning>
-
-### Creating a new table
-
-Click the **add button** in the sidebar to create a new table. This is equivalent to using the keyboard shortcut:
-
-- **Mac:** `Cmd` + `;`
-- **Windows/Linux:** `Ctrl` + `;`
-
-When you create a new table, Blazar switches to it automatically and presents a blank workspace ready for your query.
-
-### Active table indicator
-
-The currently active table is visually highlighted in the sidebar, so you always know which table you're working with.
 
 ## Keyboard shortcuts
 
-All shortcuts use `Cmd` on Mac and `Ctrl` on Windows/Linux.
+All shortcuts use `Cmd` on Mac and `Ctrl` on Windows/Linux. Press `Cmd` + `/` at any time to see this list in the app.
 
 ### Sidebar
 
@@ -50,19 +25,56 @@ All shortcuts use `Cmd` on Mac and `Ctrl` on Windows/Linux.
 | `Cmd` + `.` | Toggle sidebar |
 | `Cmd` + `;` | Create new table |
 | `Cmd` + `'` | Toggle tables list |
+| `Cmd` + `/` | Show keyboard shortcuts |
 
 ### Tables
 
 | Shortcut | Action |
 | -------- | ------ |
-| `Cmd` + `[` | Add row |
-| `Cmd` + `]` | Add column |
-| `Cmd` + `0` | Toggle citations |
+| `Cmd` + `0` | Toggle citations panel |
 
-### Others
+### Other
 
 | Shortcut | Action |
 | -------- | ------ |
-| `Cmd` + `\` | Open change history |
 | `Cmd` + `Enter` | Submit prompt |
-| `Cmd` + `/` | View keyboard shortcuts |
+| `Esc` | Discard the current conversation |
+
+## Slash commands
+
+Type `/` in the input field to open the command menu. Commands act on the table you're looking at.
+
+| Command | What it does |
+| ------- | ------------ |
+| `/enrichEmails` | Find corporate emails for rows you select — see [Finding emails](/features/emails) |
+| `/pipelineViewCols` | Choose which columns show on [pipeline](/features/pipeline) cards |
+| `/urlUI` | Switch link display between a compact chip and the full URL |
+| `/summaryVisibility` | Show or hide the run summary banner |
+
+Which commands are offered depends on what you're looking at — `/pipelineViewCols` only makes sense with a board open, for example. Commands need edit access, so a read-only collaborator won't be offered any.
+
+`/urlUI` and `/summaryVisibility` are display preferences, so they change your view only and leave your collaborators' alone.
+
+## The input under your table
+
+Once a table has results, the input beneath it does two jobs.
+
+It suggests a command that fits what you're looking at — `/urlUI` in table view, `/pipelineViewCols` on a board whose cards show columns. Press `→` to accept the suggestion: it's typed in for you with its menu open, so you can run it or keep editing.
+
+You don't have to use it that way, though. Type whatever you'd want to happen next, in plain words — no command syntax, no particular phrasing — and submit with `Cmd` + `Enter`.
+
+Commands run straight away. Everything else goes to the Hizura team, and the box replies **Noted**.
+
+Worth being straight about what that means: plain text doesn't perform the action. It tells us what you were reaching for, which is how we decide what to build next. So the more specific you are, the more useful it is:
+
+- "Add a column for their pricing page"
+- "Re-run this list every month and only show me what's new"
+- "Push these rows somewhere"
+- "Dedupe this against a list I already have"
+- "Let me edit the criteria and re-run without starting over"
+
+<Tip>
+  Wrong guesses are the most useful thing you can type. If you expected a command that doesn't exist, write it out — that tells us exactly where the product didn't match what you had in mind.
+</Tip>
+
+To research something new right now, create another table with `Cmd` + `;` rather than typing into an existing one.
